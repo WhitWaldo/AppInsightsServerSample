@@ -1,7 +1,18 @@
 ﻿@page "/"
+@inject IApplicationInsights AppInsights
 
-<h1>Hello, world!</h1>
+<button class="btn btn-primary" @onclick="TrackEvent">Track Event</button>
+<button class="btn btn-secondary" @onclick="TrackMetric">Track Metric</button>
 
-Welcome to your new app.
+@code {
+	private async Task TrackEvent()
+	{
+		await AppInsights.TrackEvent("My Event");
+	}
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+	private async Task TrackMetric()
+	{
+		await AppInsights.TrackMetric("myMetric", 100, 200, 1, 200, new Dictionary<string,object> {{"customProperty", "customValue"}});
+		await AppInsights.Flush();
+	}
+}
